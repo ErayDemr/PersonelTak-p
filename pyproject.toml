@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "personeltak"
+version = "0.1.0"
+description = "Haftalık ve tespit bazlı personel skor hesaplama aracı"
+authors = [{name = "PersonelTak"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas",
+    "openpyxl",
+    "PyYAML",
+    "filelock",
+]
+
+[project.scripts]
+personeltak = "personeltak.cli:main"

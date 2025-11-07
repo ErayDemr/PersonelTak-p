@@ -16,6 +16,18 @@ PersonelTak-p, üretim planlama ve lojistik ekipleri için haftalık ve tespit b
 
 Tek komutla kurulum ve rapor üretimi yapmak için `COMMAND.md` dosyasındaki PowerShell veya Bash komutunu kullanabilirsiniz. Komut, sanal ortam kurulumundan raporlamaya kadar tüm adımları tek satırda yürütür.
 
+## Gerekli Kütüphaneler
+
+Aşağıdaki Python paketleri uygulamanın tüm işlevselliği için yeterlidir:
+
+| Paket | İşlev |
+| --- | --- |
+| `pandas` | Excel verilerini okuyup dönüştürür. |
+| `openpyxl` | `.xlsx` dosyalarının yazılıp okunmasını sağlar. |
+| `pyyaml` | YAML yapılandırmasını içe aktarır. |
+| `filelock` | Dosya kilitleme ve eşzamanlı erişim kontrolü sağlar. |
+| `flask` | HTML tabanlı web arayüzünü sunar. |
+
 ## Kurulum
 
 ```bash
@@ -80,6 +92,26 @@ python src/personeltak_app.py web --config config.yaml --host 0.0.0.0 --port 805
 - Web arayüzü, aynı Excel dosyasını birden fazla kullanıcı kullandığında bile dosya kilidi ve loglama politikalarını uygular.
 - Sayfa üzerindeki “Excel İndir” düğmesi, ilgili haftanın Excel raporunu anlık olarak üretip indirmenizi sağlar.
 - Formu kullanarak yeni değerlendirme satırlarını (sicil, rol, Po, puan, tarih/not) hızlıca ekleyebilirsiniz.
+
+## PowerShell Üzerinden HTML Arayüzünü Çalıştırma
+
+Aşağıdaki komut dizisini PowerShell penceresine yapıştırarak bağımlılıkların kurulumunu ve web arayüzünün başlatılmasını tek adımda gerçekleştirebilirsiniz. Komutlar, sanal ortam yaratır, gerekli kütüphaneleri kurar ve varsayılan ayarlarla HTML arayüzünü açar.
+
+```powershell
+$ErrorActionPreference = "Stop"  # Hatalarda hemen dur
+if (-not (Test-Path ".venv")) { python -m venv .venv }  # Sanal ortam yoksa oluştur
+. .\.venv\Scripts\Activate.ps1  # Sanal ortamı etkinleştir
+$packages = @("pandas", "openpyxl", "pyyaml", "filelock", "flask")  # Kurulacak paket listesi
+pip install --upgrade pip  # Pip'i güncelle
+pip install $packages  # Bağımlılıkları kur
+$config = "config.yaml"  # Varsayılan konfigürasyon dosyası
+if (-not (Test-Path $config)) { Copy-Item "config.example.yaml" $config }  # Konfigürasyonu oluştur
+$port = 8050  # Web arayüz portu
+Start-Process "http://localhost:$port"  # Tarayıcıyı aç
+python src\personeltak_app.py web --config $config --host 0.0.0.0 --port $port  # Flask sunucusunu başlat
+```
+
+> Kurumsal ağda yayın yapmak için `--host` parametresini `0.0.0.0` yerine ilgili sunucu IP adresiyle güncelleyebilir, `--port` değerini politikalarınıza göre değiştirebilirsiniz.
 
 ## CSV & Power BI Entegrasyonu
 

@@ -1,0 +1,89 @@
+<!doctype html> <!-- HTML5 belgesi olduğunu belirtir -->
+<html lang="tr"> <!-- Sayfa dilini Türkçe olarak ayarlar -->
+  <head> <!-- Üst bilgi bölümünü başlatır -->
+    <meta charset="utf-8" /> <!-- Türkçe karakterlerin doğru görünmesini sağlar -->
+    <title>PersonelTak Web Paneli</title> <!-- Tarayıcı sekmesinde görünen başlık -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" /> <!-- Mobil cihazlarda doğru ölçekleme sağlar -->
+    <link rel="stylesheet" href="web/styles.css" /> <!-- Stil dosyasını kök dizinden çağırır -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script> <!-- Excel işlemleri için SheetJS CDN -->
+    <script type="module" src="web/app.js" defer></script> <!-- Uygulama mantığını içeren ES6 modülünü yükler -->
+  </head> <!-- Üst bilgi bölümünü kapatır -->
+  <body> <!-- Görünen içerik alanını başlatır -->
+    <header> <!-- Üst kısım başlık konteyneri -->
+      <h1>PersonelTak Web Paneli</h1> <!-- Ana başlığı gösterir -->
+      <p>Excel skorlarını Python çalıştırmadan yönetin.</p> <!-- Kullanıcıya kısa açıklama sunar -->
+    </header> <!-- Başlık bölümünü kapatır -->
+
+    <section> <!-- Dosya yükleme alanını kapsar -->
+      <h2>1. Excel Dosyasını Yükleyin</h2> <!-- İlk adımın başlığı -->
+      <p>"Kriterler", "Calisanlar" ve "Degerlendirmeler" sayfalarını içeren PersonelTak çalışma kitabını seçin.</p> <!-- Kullanıcı yönlendirmesi -->
+      <input id="workbook-input" type="file" accept=".xlsx,.xls" /> <!-- Excel dosyası seçimi -->
+      <p class="hint">Dosya tarayıcı üzerinde tutulur, sunucuya yüklenmez.</p> <!-- Güvenlik notu -->
+    </section> <!-- Dosya yükleme alanını kapatır -->
+
+    <section class="controls"> <!-- Kontrol butonlarını içeren bölüm -->
+      <div> <!-- Tarih seçici sarmalayıcı -->
+        <label for="asof-input">Rapor Tarihi</label> <!-- Tarih alanı etiketi -->
+        <input id="asof-input" type="date" /> <!-- Rapor tarihi seçimi -->
+      </div> <!-- Tarih alanı grubunu kapatır -->
+      <button id="refresh-button" type="button">Raporu Hesapla</button> <!-- Hesaplama butonu -->
+      <button id="download-button" type="button" disabled>Excel İndir</button> <!-- Sonuçları dışa aktarma butonu -->
+      <span id="status-text" role="status"></span> <!-- Kullanıcıya durum mesajlarını gösterir -->
+    </section> <!-- Kontrol bölümünü kapatır -->
+
+    <div id="message-area"></div> <!-- Bilgi ve uyarı mesajlarının yer aldığı alan -->
+
+    <section> <!-- Skor tablosu bölümü -->
+      <h2>Çalışan Skorları</h2> <!-- Skor tablosu başlığı -->
+      <div id="scores-table" class="table-container empty">Henüz veri yok.</div> <!-- Skorların basılacağı konteyner -->
+    </section> <!-- Skor tablosu bölümünü kapatır -->
+
+    <section> <!-- Eksik kayıtlar bölümü -->
+      <h2>Eksik Puanlamalar</h2> <!-- Eksik kayıt başlığı -->
+      <div id="missing-table" class="table-container empty">Henüz veri yok.</div> <!-- Eksik kayıtların gösterileceği alan -->
+    </section> <!-- Eksik kayıtlar bölümünü kapatır -->
+
+    <section> <!-- Yeni kayıt formunu içeren bölüm -->
+      <h2>Yeni Değerlendirme Kaydı</h2> <!-- Form başlığı -->
+      <form id="record-form" class="grid"> <!-- Form konteyneri ve ızgara düzeni -->
+        <label>Sicil <!-- Sicil alanı etiketi -->
+          <input name="sicil" required /> <!-- Sicil numarası girişi -->
+        </label> <!-- Sicil alanını kapatır -->
+        <label>Rol <!-- Rol alanı etiketi -->
+          <select name="rol" required> <!-- Rol seçimi -->
+            <option value="">Rol seçin</option> <!-- Varsayılan seçenek -->
+            <option value="Personel">Personel</option> <!-- Personel rolü -->
+            <option value="Şef">Şef</option> <!-- Şef rolü -->
+            <option value="Yönetici">Yönetici</option> <!-- Yönetici rolü -->
+          </select> <!-- Seçim listesini kapatır -->
+        </label> <!-- Rol alanını kapatır -->
+        <label>Po <!-- PO alanı etiketi -->
+          <input name="po" type="number" min="1" required /> <!-- PO numarası girişi -->
+        </label> <!-- PO alanını kapatır -->
+        <label>Puan <!-- Puan alanı etiketi -->
+          <input name="puan" type="number" min="0" step="0.01" required /> <!-- Puan değerinin girileceği alan -->
+        </label> <!-- Puan alanını kapatır -->
+        <label>Tarih <!-- Tarih alanı etiketi -->
+          <input name="tarih" type="datetime-local" /> <!-- Değerlendirme tarihi girişi -->
+        </label> <!-- Tarih alanını kapatır -->
+        <label>Not <!-- Not alanı etiketi -->
+          <textarea name="note" rows="2"></textarea> <!-- Opsiyonel açıklama alanı -->
+        </label> <!-- Not alanını kapatır -->
+        <label>Period <!-- Periyot alanı etiketi -->
+          <select name="period"> <!-- Periyot seçimi -->
+            <option value="">Kriterden al</option> <!-- Kriter varsayılanını kullan -->
+            <option value="Haftalık">Haftalık</option> <!-- Haftalık periyot -->
+            <option value="Tespit">Tespit</option> <!-- Tespit periyodu -->
+          </select> <!-- Periyot listesini kapatır -->
+        </label> <!-- Periyot alanını kapatır -->
+        <div class="form-actions"> <!-- Form buton alanı -->
+          <button type="submit">Kaydı Ekle</button> <!-- Yeni kaydı tabloya ekler -->
+        </div> <!-- Form buton alanını kapatır -->
+      </form> <!-- Formu kapatır -->
+    </section> <!-- Yeni kayıt bölümünü kapatır -->
+
+    <footer> <!-- Alt bilgi alanını başlatır -->
+      <span id="footer-text">Dosya yüklenmedi.</span> <!-- Seçili dosya adını gösterir -->
+    </footer> <!-- Alt bilgi alanını kapatır -->
+  </body> <!-- Gövde bölümünü kapatır -->
+</html> <!-- HTML belgesini sonlandırır -->

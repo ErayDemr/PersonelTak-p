@@ -14,15 +14,29 @@ PersonelTak-p, üretim planlama ve lojistik ekiplerinin haftalık ve tespit bazl
 ## Hızlı Başlangıç
 
 1. Depoyu klonlayın veya ZIP olarak indirin.
-2. `web/index.html` dosyasını çift tıklayarak açın ya da `web` klasöründe basit bir statik sunucu başlatın:
+2. Kök dizindeki `index.html` dosyasını çift tıklayarak açın; tarayıcı doğrudan PersonelTak panelini gösterecektir.
+3. Alternatif olarak kök dizinde basit bir sunucu açabilirsiniz:
    ```bash
-   python -m http.server 8000 --directory web
+   python -m http.server 8000
    ```
-3. Panelde ilk adım olarak PersonelTak Excel dosyanızı (`Kriterler`, `Calisanlar`, `Degerlendirmeler` sayfalarını içeren çalışma kitabı) yükleyin.
-4. Rapor tarihini seçip **Raporu Hesapla** düğmesine basarak skor ve eksik listelerini görüntüleyin.
-5. Yeni değerlendirme ekleyin ve **Excel İndir** düğmesiyle güncel dosyayı dışa aktarın.
+   Ardından tarayıcıda `http://localhost:8000` adresine gidin. Varsayılan index dosyası paneli otomatik yükler.
+4. Panelde ilk adım olarak PersonelTak Excel dosyanızı (`Kriterler`, `Calisanlar`, `Degerlendirmeler` sayfalarını içeren çalışma kitabı) yükleyin.
+5. Rapor tarihini seçip **Raporu Hesapla** düğmesine basarak skor ve eksik listelerini görüntüleyin.
+6. Yeni değerlendirme ekleyin ve **Excel İndir** düğmesiyle güncel dosyayı dışa aktarın.
 
-> Uygulama SheetJS kütüphanesini CDN üzerinden yükler. Offline kullanım için `web/vendor` klasörüne yerel kopya koyup `index.html` içindeki `<script>` adresini güncelleyebilirsiniz.
+> Uygulama SheetJS kütüphanesini CDN üzerinden yükler; ek kurulum gerekmez. Offline kullanım için `web/vendor` klasörüne yerel kopya koyup `index.html` içindeki `<script>` adresini güncelleyebilirsiniz.
+
+### PowerShell ile hızlı kurulum
+
+Ekstra HTML kütüphanesi yüklemeniz gerekmez; yalnızca Python 3 ile gelen yerleşik sunucu yeterlidir. Aşağıdaki komutları PowerShell penceresinde sırasıyla çalıştırabilirsiniz:
+
+```powershell
+Set-Location "C:\\calisma\\PersonelTak-p" # Depo klasörüne gir
+python -m http.server 8000                    # Yerleşik statik sunucuyu başlat
+Start-Process "http://localhost:8000"        # Paneli varsayılan tarayıcıda aç
+```
+
+Sunucuyu kapatmak için PowerShell penceresinde `Ctrl+C` kombinasyonunu kullanın.
 
 ## JavaScript Bağımlılıkları
 

@@ -1,0 +1,19 @@
+role_weights:
+  Personel: 0.2
+  Şef: 0.4
+  Yönetici: 0.4
+category_weights:
+  İş: 1.0
+  Kanaat: 0.7
+tespit_days: 30
+timezone: Europe/Istanbul
+excel_path: data/input.xlsx
+employees_path: C:/ProgramData/PersonelTak/Calisanlar.xlsx
+report_path: reports
+log_path: logs/personeltak.log
+log_level: INFO
+missing_threshold: null
+csv_export: true
+powerbi_export: true
+powerbi_output: reports/powerbi
+lock_timeout: 30

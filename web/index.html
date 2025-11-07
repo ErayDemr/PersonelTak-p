@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>PersonelTak Web Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" defer></script>
+    <script type="module" src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>PersonelTak Web Paneli</h1>
+      <p>Excel skorlarını Python çalıştırmadan yönetin.</p>
+    </header>
+
+    <section>
+      <h2>1. Excel Dosyasını Yükleyin</h2>
+      <p>"Kriterler", "Calisanlar" ve "Degerlendirmeler" sayfalarını içeren PersonelTak çalışma kitabını seçin.</p>
+      <input id="workbook-input" type="file" accept=".xlsx,.xls" />
+      <p class="hint">Dosya tarayıcı üzerinde tutulur, sunucuya yüklenmez.</p>
+    </section>
+
+    <section class="controls">
+      <div>
+        <label for="asof-input">Rapor Tarihi</label>
+        <input id="asof-input" type="date" />
+      </div>
+      <button id="refresh-button" type="button">Raporu Hesapla</button>
+      <button id="download-button" type="button" disabled>Excel İndir</button>
+      <span id="status-text" role="status"></span>
+    </section>
+
+    <div id="message-area"></div>
+
+    <section>
+      <h2>Çalışan Skorları</h2>
+      <div id="scores-table" class="table-container empty">Henüz veri yok.</div>
+    </section>
+
+    <section>
+      <h2>Eksik Puanlamalar</h2>
+      <div id="missing-table" class="table-container empty">Henüz veri yok.</div>
+    </section>
+
+    <section>
+      <h2>Yeni Değerlendirme Kaydı</h2>
+      <form id="record-form" class="grid">
+        <label>Sicil
+          <input name="sicil" required />
+        </label>
+        <label>Rol
+          <select name="rol" required>
+            <option value="">Rol seçin</option>
+            <option value="Personel">Personel</option>
+            <option value="Şef">Şef</option>
+            <option value="Yönetici">Yönetici</option>
+          </select>
+        </label>
+        <label>Po
+          <input name="po" type="number" min="1" required />
+        </label>
+        <label>Puan
+          <input name="puan" type="number" min="0" step="0.01" required />
+        </label>
+        <label>Tarih
+          <input name="tarih" type="datetime-local" />
+        </label>
+        <label>Not
+          <textarea name="note" rows="2"></textarea>
+        </label>
+        <label>Period
+          <select name="period">
+            <option value="">Kriterden al</option>
+            <option value="Haftalık">Haftalık</option>
+            <option value="Tespit">Tespit</option>
+          </select>
+        </label>
+        <div class="form-actions">
+          <button type="submit">Kaydı Ekle</button>
+        </div>
+      </form>
+    </section>
+
+    <footer>
+      <span id="footer-text">Dosya yüklenmedi.</span>
+    </footer>
+  </body>
+</html>
